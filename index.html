@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Scramble Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        form {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Word Scramble Game</h1>
+    <p>Your Score: <strong>{{ score }}</strong></p>
+    {% if result %}
+        <p><strong>{{ result }}</strong></p>
+    {% endif %}
+    {% if scrambled_word %}
+        <p>Scrambled Word: <strong>{{ scrambled_word }}</strong></p>
+        <form method="POST">
+            <input type="hidden" name="original_word" value="{{ original_word }}">
+            <label for="user_guess">Your Guess:</label>
+            <input type="text" id="user_guess" name="user_guess" required>
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
+</body>
+</html>
