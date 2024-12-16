@@ -72,9 +72,12 @@
   <script>
     // Word list
     const wordList = ["python", "programming", "developer", "scramble", "function", "variable", "algorithm", "debug"];
+    let unusedWords = [...wordList]; // Copy of the word list to track unused words
     let currentWord = "";
     let scrambledWord = "";
-    let score = 0;
+
+    // Initialize score from localStorage or start at 0
+    let score = parseInt(localStorage.getItem("score")) || 0;
 
     // DOM elements
     const scrambledWordElement = document.getElementById("scrambled-word");
@@ -83,6 +86,9 @@
     const scoreElement = document.getElementById("score");
     const submitButton = document.getElementById("submit-btn");
 
+    // Update score on the page
+    scoreElement.textContent = score;
+
     // Function to scramble a word
     function scrambleWord(word) {
       return word.split("").sort(() => Math.random() - 0.5).join("");
@@ -90,9 +96,19 @@
 
     // Function to set a new word
     function setNewWord() {
-      currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+      if (unusedWords.length === 0) {
+        // Reset unused words if all have been used
+        unusedWords = [...wordList];
+        alert("All words have been used! Resetting the word list.");
+      }
+
+      // Pick a random word from the unused words
+      const randomIndex = Math.floor(Math.random() * unusedWords.length);
+      currentWord = unusedWords.splice(randomIndex, 1)[0]; // Remove the selected word from unusedWords
       scrambledWord = scrambleWord(currentWord);
       scrambledWordElement.textContent = scrambledWord;
+
+      // Clear input and result
       userGuessElement.value = "";
       resultElement.textContent = "";
     }
@@ -105,6 +121,7 @@
         resultElement.textContent = "Correct! Great job.";
         resultElement.style.color = "#28a745";
         score++;
+        localStorage.setItem("score", score); // Save score to localStorage
         scoreElement.textContent = score;
         setTimeout(setNewWord, 1500); // Delay before showing the next word
       } else {
