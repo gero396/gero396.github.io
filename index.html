@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Scramble Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 600px;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #333;
+    }
+    .scrambled-word {
+      font-size: 1.5em;
+      margin: 20px 0;
+      color: #555;
+    }
+    .score {
+      margin: 10px 0;
+      font-size: 1.2em;
+      color: #28a745;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1em;
+      width: 70%;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Word Scramble Game</h1>
+    <p class="score">Score: <span id="score">0</span></p>
+    <p>Unscramble this word:</p>
+    <p class="scrambled-word" id="scrambled-word">Loading...</p>
+    <input type="text" id="user-guess" placeholder="Your guess here" />
+    <button id="submit-btn">Submit</button>
+    <p class="result" id="result"></p>
+  </div>
+
+  <script>
+    // Word list
+    const wordList = ["python", "programming", "developer", "scramble", "function", "variable", "algorithm", "debug"];
+    let currentWord = "";
+    let scrambledWord = "";
+    let score = 0;
+
+    // DOM elements
+    const scrambledWordElement = document.getElementById("scrambled-word");
+    const userGuessElement = document.getElementById("user-guess");
+    const resultElement = document.getElementById("result");
+    const scoreElement = document.getElementById("score");
+    const submitButton = document.getElementById("submit-btn");
+
+    // Function to scramble a word
+    function scrambleWord(word) {
+      return word.split("").sort(() => Math.random() - 0.5).join("");
+    }
+
+    // Function to set a new word
+    function setNewWord() {
+      currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+      scrambledWord = scrambleWord(currentWord);
+      scrambledWordElement.textContent = scrambledWord;
+      userGuessElement.value = "";
+      resultElement.textContent = "";
+    }
+
+    // Function to handle the submit action
+    function handleSubmit() {
+      const userGuess = userGuessElement.value.trim().toLowerCase();
+
+      if (userGuess === currentWord) {
+        resultElement.textContent = "Correct! Great job.";
+        resultElement.style.color = "#28a745";
+        score++;
+        scoreElement.textContent = score;
+        setTimeout(setNewWord, 1500); // Delay before showing the next word
+      } else {
+        resultElement.textContent = "Incorrect. Try again.";
+        resultElement.style.color = "#dc3545";
+      }
+
+      userGuessElement.value = ""; // Clear input for the next attempt
+      userGuessElement.focus(); // Keep focus on the input field
+    }
+
+    // Add event listener to the submit button
+    submitButton.addEventListener("click", handleSubmit);
+
+    // Add "Enter" key press support for form submission
+    userGuessElement.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        handleSubmit();
+      }
+    });
+
+    // Initialize the game
+    setNewWord();
+  </script>
+</body>
+</html>
