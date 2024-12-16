@@ -56,6 +56,13 @@
     button:hover {
       background-color: #0056b3;
     }
+    .skip-btn {
+      background-color: #ffc107;
+      margin-left: 10px;
+    }
+    .skip-btn:hover {
+      background-color: #e0a800;
+    }
   </style>
 </head>
 <body>
@@ -66,6 +73,7 @@
     <p class="scrambled-word" id="scrambled-word">Loading...</p>
     <input type="text" id="user-guess" placeholder="Your guess here" />
     <button id="submit-btn">Submit</button>
+    <button id="skip-btn" class="skip-btn">Skip</button>
     <p class="result" id="result"></p>
   </div>
 
@@ -85,6 +93,7 @@
     const resultElement = document.getElementById("result");
     const scoreElement = document.getElementById("score");
     const submitButton = document.getElementById("submit-btn");
+    const skipButton = document.getElementById("skip-btn");
 
     // Update score on the page
     scoreElement.textContent = score;
@@ -133,8 +142,18 @@
       userGuessElement.focus(); // Keep focus on the input field
     }
 
+    // Function to handle the skip action
+    function handleSkip() {
+      // Move the current word to the end of the unusedWords array
+      unusedWords.push(currentWord);
+      setNewWord(); // Load the next word
+    }
+
     // Add event listener to the submit button
     submitButton.addEventListener("click", handleSubmit);
+
+    // Add event listener to the skip button
+    skipButton.addEventListener("click", handleSkip);
 
     // Add "Enter" key press support for form submission
     userGuessElement.addEventListener("keypress", (event) => {
